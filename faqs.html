@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FAQs | SUN PHARMACEUTICALS INDUSTRIES LIMITED</title>
+  <meta name="description" content="Answers to common questions about Sun Pharmaceuticals Industries LTD — distribution, pricing, adverse event reporting, careers, and investor contact.">
+  <!-- Favicon: .ico covers browser tabs/bookmarks across the board, the
+       explicit 32px PNG is preferred by browsers that support it, and the
+       apple-touch-icon is what shows up if someone adds this to an iOS
+       home screen. All three point at the same swirl logo. -->
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-180.png">
+  <!-- Fonts: Bricolage Grotesque for headings, Public Sans for body. System fallbacks are set in CSS. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Skip link: first focusable element, jumps keyboard/screen-reader users past the header -->
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <!-- 1. Dismissible compliance notice bar. Visible with no JS; JS only adds the dismiss behaviour. -->
+  <div class="notice-bar" id="noticeBar" role="region" aria-label="Compliance notice">
+    <p class="notice-bar__text">This website is intended for healthcare professionals, distributors, and investors in India. It does not provide medical advice. <a href="index.html#contact">Report an adverse event</a>.</p>
+    <button class="notice-bar__close" id="noticeClose" type="button" aria-label="Dismiss notice">&times;</button>
+  </div>
+
+  <!-- 2. Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="site-header__inner">
+      <a href="index.html" class="site-header__logo" aria-label="Sun Pharmaceuticals Industries LTD, home">
+        <img src="images/logo.png" alt="" class="logo-mark">
+        <span class="logo-text">Sun<span class="logo-text__sub">Pharmaceuticals Industries LTD</span></span>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary">
+        <ul class="main-nav__list">
+          <li class="main-nav__item main-nav__item--has-sub">
+            <a href="index.html#about" aria-expanded="false" aria-haspopup="true">About</a>
+            <ul class="sub-menu">
+              <li><a href="index.html#about">Overview</a></li>
+              <li><a href="mission-vision.html">Mission &amp; Vision</a></li>
+              <li><a href="milestones.html">Milestones &amp; Recognitions</a></li>
+            </ul>
+          </li>
+          <li class="main-nav__item main-nav__item--has-sub">
+            <!-- Desktop: opens on :hover and :focus-within in CSS, no JS required. JS adds aria-expanded bookkeeping only. -->
+            <a href="products.html" aria-expanded="false" aria-haspopup="true">Products</a>
+            <ul class="sub-menu">
+              <li><a href="products.html#quick-links">Catalogue</a></li>
+              <li><a href="products.html#price-list">Price list</a></li>
+              <li><a href="products.html#quick-links">Circulars</a></li>
+            </ul>
+          </li>
+          <li class="main-nav__item main-nav__item--has-sub">
+            <a href="investors.html" aria-expanded="false" aria-haspopup="true">Investors</a>
+            <ul class="sub-menu">
+              <li><a href="investors.html">Overview</a></li>
+              <li><a href="board-of-directors.html">Board of Directors</a></li>
+            </ul>
+          </li>
+          <li class="main-nav__item"><a href="index.html#careers">Careers</a></li>
+          <li class="main-nav__item"><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <button class="icon-button" type="button" aria-label="Search the site">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+
+        <!-- No-JS-safe mobile menu: native details/summary, fully usable without JavaScript. -->
+        <details class="mobile-menu">
+          <summary class="mobile-menu__toggle" aria-label="Open menu">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </summary>
+          <div class="mobile-menu__panel">
+            <ul class="mobile-menu__list">
+              <li>
+                <details class="mobile-menu__sub">
+                  <summary>About</summary>
+                  <ul>
+                    <li><a href="index.html#about">Overview</a></li>
+                    <li><a href="mission-vision.html">Mission &amp; Vision</a></li>
+                    <li><a href="milestones.html">Milestones &amp; Recognitions</a></li>
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <details class="mobile-menu__sub">
+                  <summary>Products</summary>
+                  <ul>
+                    <li><a href="products.html#quick-links">Catalogue</a></li>
+                    <li><a href="products.html#price-list">Price list</a></li>
+                    <li><a href="products.html#quick-links">Circulars</a></li>
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <details class="mobile-menu__sub">
+                  <summary>Investors</summary>
+                  <ul>
+                    <li><a href="investors.html">Overview</a></li>
+                    <li><a href="board-of-directors.html">Board of Directors</a></li>
+                  </ul>
+                </details>
+              </li>
+              <li><a href="index.html#careers">Careers</a></li>
+              <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. Sub-nav: stays pinned to the top of the viewport while the main header hides on scroll. -->
+  <nav class="sub-nav" aria-label="Section shortcuts">
+    <div class="sub-nav__scroll">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="products.html#price-list">Price list</a>
+      <a href="products.html#quick-links">Circulars</a>
+    </div>
+  </nav>
+
+  <main id="main-content">
+
+    <section class="page-intro" aria-label="Page introduction">
+      <div class="container">
+        <h1>Frequently asked questions</h1>
+        <p>Straight answers for distributors, chemists, job seekers, and investors. If yours isn't here, <a href="index.html#contact">contact us directly</a>.</p>
+      </div>
+    </section>
+
+    <section aria-label="Questions and answers">
+      <div class="container">
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>How do I become a registered distributor?</summary>
+            <div class="faq-item__answer">
+              <p>Contact our office with your business details and the states you'd like to cover. We'll send onboarding paperwork and current trade terms directly.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Where can I find the current price list?</summary>
+            <div class="faq-item__answer">
+              <p>The full catalogue and price list are on the <a href="products.html#price-list">Products page</a>, with MRP, GST, and availability listed against every active product.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How do I report an adverse event?</summary>
+            <div class="faq-item__answer">
+              <p>Email or call our office directly. Every report reaches our pharmacovigilance team regardless of how it was submitted — see the <a href="index.html#contact">Contact section</a> for details.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does Sun pharmaceuticals distribute outside India?</summary>
+            <div class="faq-item__answer">
+              <p>Yes. We manufacture and distribute outside India. Contact our office for further enquiry.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What GST rate applies to Sun pharmaceuticals products?</summary>
+            <div class="faq-item__answer">
+              <p>Most products are taxed at 12%. A few categories, including vaccines and select oncology products, fall under the 5% slab. Exact rates are listed against each product on the <a href="products.html#price-list">price list</a>.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How can I apply for a job at Sun Pharma?</summary>
+            <div class="faq-item__answer">
+              <p>Send your CV to our careers team — see the <a href="index.html#careers">Careers section</a> for the departments we're currently hiring across.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Who do I contact for investor relations?</summary>
+            <div class="faq-item__answer">
+              <p>Reach our investor relations team directly from the <a href="investors.html">Investors page</a>, which also has filings and governance details.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does this website provide medical advice?</summary>
+            <div class="faq-item__answer">
+              <p>No. This site is intended for healthcare professionals, distributors, and investors — nothing here should be treated as medical advice. If you're experiencing a medical issue, contact a healthcare provider directly.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 10. Footer -->
+  <footer class="site-footer">
+    <div class="container site-footer__grid">
+      <div class="footer-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#careers">Careers</a></li>
+          <li><a href="index.html#contact">Newsroom</a></li>
+          <li><a href="investors.html">Investors</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Products</h3>
+        <ul>
+          <li><a href="products.html#quick-links">Catalogue</a></li>
+          <li><a href="products.html#price-list">Price list</a></li>
+          <li><a href="products.html#quick-links">Circulars</a></li>
+          <li><a href="index.html#contact">Report an adverse event</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="products.html#quick-links">Prescribing information</a></li>
+          <li><a href="products.html#quick-links">Safety data sheets</a></li>
+          <li><a href="index.html#contact">Distributor portal</a></li>
+          <li><a href="faqs.html">FAQs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="index.html#contact">Privacy policy</a></li>
+          <li><a href="index.html#contact">Terms of use</a></li>
+          <li><a href="index.html#contact">Disclaimer</a></li>
+          <li><a href="index.html#contact">Cookie settings</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container site-footer__bottom">
+      <ul class="social-links">
+        <li>
+          <a href="https://www.linkedin.com/company/sun-pharma/" aria-label="Sun Pharmaceuticals Industries LTD on LinkedIn">
+            <svg class="social-links__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.491V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.119 20.452H3.556V9h3.563v11.452zM22.225 0H1.771C.792 0 0 .774 0 1。7２９V２０。５４２C０ ２３。２２７。７９２ ２４ １。７７１ ２４h２０。４５１C２３。２ ２４ ２４ ２３。２２７ ２４ ２２。２７１V１。７２９C２４ 。７７４ ２３。２ 。０ ２２。２２２ 。０h．００３z"/></svg>
+            <span>LinkedIn</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://x.com/SunPharma_Live" aria-label="Sun Pharmaceuticals Industries LTD on X">
+            <svg class="social-links__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+            <span>X (Twitter)</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.youtube.com/@SunPharmaLive" aria-label="Sun Pharmaceuticals Industires LTD on YouTube">
+            <svg class="social-links__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.498 6.186a2.994 2.994 0 0 0-2.112-2.12C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.386.521A2.994 2.994 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a2.994 2.994 0 0 0 2.112 2.12c1.881.521 9.386.521 9.386.521s7.505 0 9.386-.521a2.994 2.994 0 0 0 2.112-2.12C24 15.93 24 12 24 12s0-3.93-.502-5.814ZM9.545 15.568V8.432L15.818 12l-6.273 3.568Z"/></svg>
+            <span>YouTube</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Floating help button, bottom-left, 44px minimum tap target -->
+  <a class="help-button" href="index.html#contact" aria-label="Need help? Go to contact section">?</a>
+
+  <script src="main.js" defer></script>
+</body>
+</html>

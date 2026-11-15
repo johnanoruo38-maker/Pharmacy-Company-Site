@@ -1,0 +1,1082 @@
+/* ==========================================================================
+   1. Variables
+   Design tokens. Edit colors/fonts here and they propagate everywhere.
+   ========================================================================== */
+:root {
+  /* Brand palette, derived from the uploaded swirl logo. --ink and --accent
+     are extracted directly from it. --orange and --deep-orange are NOT in
+     the logo — the raw logo-orange measures 2.10:1 against white, which
+     fails as text (needs 4.5:1), so these are the same hue darkened until
+     the math actually passes. --cream is extracted too, but only works as
+     light text/accents against dark surfaces (1.32:1 against white — it's
+     essentially invisible there), never as foreground on a light background. */
+  --ink: #0D1018;
+  --orange: #996300;
+  --deep-orange: #663F00;
+  --accent: #F8A000;
+  --cream: #F8DCB4;
+  --bg: #FDF6EC;
+  --line: #E8D9C0;
+
+  /* Separate from --orange: --orange is also a BACKGROUND color (help-button,
+     chart fills) that must stay put in dark mode. --link is ONLY ever text
+     color, so it's free to flip to a brighter value in dark mode without
+     breaking anything else that happens to share the orange hue. */
+  --link: var(--orange);
+
+  /* Derived surfaces — not in the brief's six, needed to build with them */
+  --surface: #FFFFFF;
+  --ink-soft: #725D37; /* ink at reduced visual weight, for secondary text */
+
+  /* Typography */
+  --font-heading: "Bricolage Grotesque", "Georgia", serif;
+  --font-body: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Spacing — 8px base unit */
+  --space-1: 0.5rem;   /* 8px */
+  --space-2: 1rem;     /* 16px */
+  --space-3: 1.5rem;   /* 24px */
+  --space-4: 2rem;     /* 32px */
+  --space-5: 3rem;     /* 48px */
+  --space-6: 4rem;     /* 64px */
+
+  --container-max: 1120px;
+  --section-pad: clamp(2.5rem, 6vw, 4.5rem);
+
+  /* Radius by role — do not unify these, the brief treats them as distinct signals */
+  --radius-button: 8px;
+  --radius-card: 12px;
+  --radius-pill: 999px;
+
+  /* Header */
+  --header-height: 64px;
+  --subnav-height: 44px;
+
+  --banner-img: url("images/banner.jpg");
+
+  /* Second image hook, for the About "Our Approach / Our Values" tab media block. */
+  --about-img: url("images/about.jpg");
+
+  --mission-img: url("images/mission.jpg");
+  --products-img: url("images/products.jpg");
+  --investors-img: url("images/investors.jpg");
+
+  /* Board member photos — placeholder gradients below. Replace each with
+     url("images/board-N.jpg") once you have real headshots. Numbered 1-6
+     in the order the members appear on the page: Kulkarni, Deshmukh, Rao,
+     Nair, Verghese, Bhatt. */
+  --board-1-img: linear-gradient(135deg, var(--orange) 0%, var(--deep-orange) 100%);
+  --board-2-img: linear-gradient(135deg, var(--orange) 0%, var(--deep-orange) 100%);
+  --board-3-img: linear-gradient(135deg, var(--orange) 0%, var(--deep-orange) 100%);
+  --board-4-img: linear-gradient(135deg, var(--orange) 0%, var(--deep-orange) 100%);
+  --board-5-img: linear-gradient(135deg, var(--orange) 0%, var(--deep-orange) 100%);
+  --board-6-img: linear-gradient(135deg, var(--orange) 0%, var(--deep-orange) 100%);
+}
+
+/* ==========================================================================
+   2. Reset and base
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  /* Keeps anchor targets from hiding under the sticky header/sub-nav */
+  scroll-padding-top: calc(var(--header-height) + var(--subnav-height) + var(--space-2));
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  color: var(--ink);
+  line-height: 1.15;
+  margin: 0 0 var(--space-2);
+  font-weight: 700;
+}
+
+h1 { font-size: clamp(2rem, 4.5vw, 3.25rem); font-weight: 800; }
+h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+h3 { font-size: clamp(1.1rem, 1.6vw, 1.35rem); }
+
+p {
+  margin: 0 0 var(--space-3);
+  max-width: 65ch;
+}
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
+
+a:hover { color: var(--ink); } /* ink flips correctly in both modes; deep-orange would go invisible on a dark background */
+
+img { max-width: 100%; display: block; }
+
+ul { list-style: none; margin: 0; padding: 0; }
+
+button { font: inherit; }
+
+/* Visible, consistent focus ring everywhere — accent color is used for this intentionally */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   3. Layout
+   ========================================================================== */
+.container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-3);
+}
+
+main > section {
+  padding-block: var(--section-pad);
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-2);
+  top: -100px;
+  background: var(--ink);
+  color: #fff;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-button);
+  z-index: 200;
+  transition: top 150ms ease;
+}
+.skip-link:focus { top: var(--space-2); }
+
+/* Buttons — shared shape, role-specific color */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-button);
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  min-height: 44px;
+}
+/* Primary action: accent background paired with ink text, not white.
+   White-on-accent measures ~2.1:1 and fails WCAG AA; ink-on-accent measures ~9.1:1. */
+.btn--primary {
+  background: var(--accent);
+  color: var(--ink);
+}
+.btn--primary:hover { background: #EB9700; color: var(--ink); }
+
+/* ==========================================================================
+   4. Header and nav
+   ========================================================================== */
+.notice-bar {
+  background: var(--deep-orange);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.9rem;
+}
+.notice-bar__text { margin: 0; max-width: none; }
+.notice-bar__text a { color: var(--cream); } /* accent here measured 4.40:1 on deep-orange, a near-miss — cream clears it at 6.98:1 */
+.notice-bar__close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: var(--radius-button);
+}
+.notice-bar.is-dismissed { display: none; }
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  /* Transform-based hide/show; default state is always visible so a no-JS
+     visitor, or JS that fails to load, simply keeps the header in place. */
+  transition: transform 250ms ease;
+}
+.site-header.is-hidden { transform: translateY(-100%); }
+
+.site-header__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.site-header__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  text-decoration: none;
+  color: var(--ink);
+}
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+.logo-text {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.1;
+  display: flex;
+  flex-direction: column;
+}
+.logo-text__sub {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.65rem;
+  color: var(--ink-soft);
+}
+
+.main-nav { display: none; } /* shown at desktop breakpoint, section 12 utilities handles mobile equivalent */
+
+.main-nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.main-nav__item { position: relative; }
+.main-nav__item > a {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  padding: var(--space-1) 0;
+  display: inline-block;
+}
+.main-nav__item > a:hover,
+.main-nav__item:focus-within > a { color: var(--link); }
+
+/* Dropdown opens on hover AND keyboard focus via :focus-within — no JS required */
+.sub-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 180px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: var(--space-1);
+  box-shadow: 0 8px 24px rgba(13, 16, 24, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+.main-nav__item--has-sub:hover .sub-menu,
+.main-nav__item--has-sub:focus-within .sub-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.sub-menu li a {
+  display: block;
+  padding: var(--space-1) var(--space-2);
+  border-radius: 6px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+}
+.sub-menu li a:hover { background: var(--bg); color: var(--link); }
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.icon-button {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  color: var(--ink);
+}
+.icon-button:hover { background: var(--bg); }
+.icon { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+/* Mobile menu — native details/summary so it works with zero JavaScript */
+.mobile-menu { position: relative; }
+.mobile-menu__toggle {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  list-style: none;
+}
+.mobile-menu__toggle::-webkit-details-marker { display: none; }
+.mobile-menu__toggle:hover { background: var(--bg); }
+.mobile-menu[open] .mobile-menu__toggle { background: var(--bg); }
+
+.mobile-menu__panel {
+  position: fixed;
+  inset: var(--header-height) 0 0 0;
+  background: var(--surface);
+  z-index: 99;
+  overflow-y: auto;
+  padding: var(--space-3);
+}
+.mobile-menu__list { display: flex; flex-direction: column; gap: var(--space-1); }
+.mobile-menu__list > li > a {
+  display: block;
+  padding: var(--space-2);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-radius: var(--radius-button);
+}
+.mobile-menu__list > li > a:hover { background: var(--bg); }
+.mobile-menu__sub summary {
+  padding: var(--space-2);
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border-radius: var(--radius-button);
+}
+.mobile-menu__sub ul { padding-left: var(--space-3); display: flex; flex-direction: column; }
+.mobile-menu__sub a {
+  display: block;
+  padding: var(--space-1) var(--space-2);
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+/* Sub-nav bar: pinned to the very top, horizontally scrollable on mobile */
+.sub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  background: var(--deep-orange);
+  height: var(--subnav-height);
+}
+.sub-nav__scroll {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  overflow-x: auto;
+  padding-inline: var(--space-3);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  scrollbar-width: none;
+}
+.sub-nav__scroll::-webkit-scrollbar { display: none; }
+.sub-nav a {
+  color: var(--cream);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.sub-nav a:hover { color: #fff; }
+
+/* Added: page-intro — the banner's equivalent on pages that aren't the
+   homepage (Mission & Vision, Products, Investors). No photo, since those
+   pages are information-first, not a first-impression hero. */
+.page-intro { background: var(--surface); }
+.page-intro h1 { margin-bottom: var(--space-1); }
+.page-intro p { color: var(--ink-soft); max-width: 60ch; margin: 0; }
+
+/* Added: optional photo treatment for page-intro, same overlay recipe as
+   the homepage banner. Opt-in via a modifier class so Investors and FAQs
+   stay as plain flat bands — not every page needs a hero photo. */
+.page-intro--photo {
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  display: flex;
+  align-items: flex-end;
+}
+.page-intro__media {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.page-intro__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(253, 246, 236, 0.82);
+}
+.page-intro--photo .container { position: relative; padding-block-end: var(--space-4); }
+.page-intro--photo p { color: var(--ink); } /* ink-soft loses too much contrast over a photo-backed overlay */
+
+/* background-position: center (the shared default) lands this photo right
+   on the subjects' faces, which fades to a half-visible, slightly uncanny
+   expression at 82% overlay — tested and rejected. Bottom-aligned instead,
+   which shows the clasped hands, white coat, and counter — still clearly
+   reads as a pharmacy consultation, without the face problem. */
+.page-intro--mission .page-intro__media { background-image: var(--mission-img); background-position: center bottom; }
+.page-intro--products .page-intro__media { background-image: var(--products-img); }
+.page-intro--investors .page-intro__media { background-image: var(--investors-img); }
+
+/* Added: cross-links from About to Mission & Vision and Milestones & Recognitions */
+.about__teaser {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  border-left: 3px solid var(--accent);
+  padding-left: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+/* ==========================================================================
+   5. Banner
+   ========================================================================== */
+.banner {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  opacity: 0;
+  animation: banner-fade-in 400ms ease forwards;
+}
+.banner__media {
+  position: absolute;
+  inset: 0;
+  background-image: var(--banner-img);
+  background-size: cover;
+  background-position: center;
+}
+/* Light overlay so the photo reads as faint texture, not a competing image */
+.banner__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(253, 246, 236, 0.82);
+}
+.banner .container { position: relative; padding-block-end: var(--space-5); }
+.banner__title {
+  max-width: 18ch;
+  color: var(--deep-orange); /* dark brand color on light overlay — passes WCAG AA */
+}
+
+@keyframes banner-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (min-width: 768px) {
+  .banner { min-height: 380px; }
+}
+
+/* ==========================================================================
+   6. Key figures
+   ========================================================================== */
+.key-figures { padding-block: var(--space-5); background: var(--surface); }
+.key-figures__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+.key-figure__number {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  color: var(--link);
+  margin: 0;
+  line-height: 1;
+}
+.key-figure__label {
+  margin: var(--space-1) 0 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  max-width: 20ch;
+}
+
+@media (min-width: 640px) {
+  .key-figures__grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ==========================================================================
+   7. About and chart
+   ========================================================================== */
+.about__grid {
+  display: grid;
+  gap: var(--space-5);
+}
+.about__chart {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+.about__chart-title { margin-bottom: var(--space-3); }
+.bar-chart { display: flex; flex-direction: column; gap: var(--space-2); }
+.bar-chart__row {
+  display: grid;
+  grid-template-columns: minmax(9ch, auto) 1fr 4ch;
+  align-items: center;
+  gap: var(--space-2);
+}
+.bar-chart__label { font-size: 0.85rem; color: var(--ink-soft); }
+.bar-chart__track {
+  height: 10px;
+  background: var(--bg);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+.bar-chart__fill {
+  display: block;
+  height: 100%;
+  background: var(--orange);
+  border-radius: var(--radius-pill);
+}
+.bar-chart__value { font-weight: 700; font-size: 0.85rem; text-align: right; }
+
+@media (min-width: 900px) {
+  .about__grid { grid-template-columns: 1.1fr 1fr; align-items: start; }
+}
+
+/* Added: Mission and Vision cards, stated before the narrative paragraphs */
+.mission-vision {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+.mission-vision__card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--orange);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+.mission-vision__card--vision { border-top-color: var(--accent); }
+.mission-vision__card h3 { margin-bottom: var(--space-1); }
+.mission-vision__card p { margin: 0; color: var(--ink-soft); max-width: 48ch; }
+
+@media (min-width: 720px) {
+  .mission-vision { grid-template-columns: 1fr 1fr; }
+}
+
+/* Added: company snapshot stat band beneath the two-column About content */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+.about-stats__item { display: flex; align-items: flex-start; gap: var(--space-2); }
+.about-stats__icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-card);
+  background: var(--bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--link);
+}
+.about-stats__icon .icon { width: 20px; height: 20px; }
+.about-stats__number {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.5rem;
+  margin: 0;
+  line-height: 1.1;
+}
+.about-stats__label { margin: 2px 0 0; font-size: 0.85rem; color: var(--ink-soft); max-width: 22ch; }
+
+@media (min-width: 720px) {
+  .about-stats { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Added: Our Vision / Our Approach / Our Values switcher.
+   Built with radio inputs + labels rather than JS, so it still works if
+   main.js fails to load — the same progressive-enhancement approach the
+   mobile menu above uses with <details>/<summary>. */
+.about-tabs { border: 0; margin: var(--space-5) 0 0; padding: 0; }
+
+.about-tabs__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--space-4);
+}
+.about-tabs__label {
+  display: inline-block;
+  padding: var(--space-2) var(--space-3);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+}
+.about-tabs__label:hover { color: var(--link); }
+
+.about-tabs__body { display: grid; gap: var(--space-4); }
+.about-tabs__media {
+  min-height: 220px;
+  border-radius: var(--radius-card);
+  background-image: var(--about-img);
+  background-size: cover;
+  background-position: center;
+}
+.about-tabs__panel { display: none; }
+
+/* Show the panel and highlight the label matching the checked radio.
+   .about-tabs__nav and .about-tabs__body are both siblings of the radios,
+   so the sibling combinator can reach into either one. */
+#tab-approach:checked ~ .about-tabs__nav label[for="tab-approach"],
+#tab-values:checked ~ .about-tabs__nav label[for="tab-values"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+#tab-approach:checked ~ .about-tabs__body #panel-approach,
+#tab-values:checked ~ .about-tabs__body #panel-values {
+  display: block;
+}
+
+/* Visible focus ring on the label when its (visually hidden) radio is
+   keyboard-focused, so Tab-key users don't lose their place. */
+#tab-approach:focus-visible ~ .about-tabs__nav label[for="tab-approach"],
+#tab-values:focus-visible ~ .about-tabs__nav label[for="tab-values"] {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.values-list { display: flex; flex-direction: column; gap: var(--space-2); }
+.values-list li { max-width: 60ch; }
+.values-list strong { color: var(--link); }
+
+@media (min-width: 800px) {
+  .about-tabs__body { grid-template-columns: 1fr 1fr; align-items: start; }
+}
+
+/* ==========================================================================
+   8. Cards
+   ========================================================================== */
+.quick-links { background: var(--surface); }
+.quick-links__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+.quick-link-card {
+  display: block;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  text-decoration: none;
+  color: var(--ink);
+}
+.quick-link-card h3 { margin-bottom: var(--space-1); color: var(--ink); }
+.quick-link-card p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; }
+.quick-link-card:hover { border-color: var(--orange); }
+.quick-link-card--urgent {
+  background: var(--deep-orange);
+  border-color: var(--deep-orange);
+}
+.quick-link-card--urgent h3 { color: #fff; }
+.quick-link-card--urgent p { color: var(--cream); }
+
+@media (min-width: 720px) {
+  .quick-links__grid { grid-template-columns: repeat(2, 1fr); }
+  .quick-link-card--urgent { grid-column: span 2; }
+}
+@media (min-width: 1000px) {
+  .quick-links__grid { grid-template-columns: repeat(3, 1fr); }
+  .quick-link-card--urgent { grid-column: span 1; }
+}
+
+/* ==========================================================================
+   9. Table
+   ========================================================================== */
+.price-section__hint {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin: 0 0 var(--space-2);
+}
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  max-width: 100%;
+}
+table { border-collapse: collapse; width: 100%; min-width: 640px; }
+caption {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  background: var(--surface);
+}
+th, td {
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+thead th {
+  position: sticky;
+  top: 0;
+  background: var(--deep-orange);
+  color: #fff;
+  z-index: 2;
+}
+tbody th {
+  position: sticky;
+  left: 0;
+  background: var(--surface);
+  z-index: 1;
+  font-weight: 600;
+}
+tbody tr:nth-child(even) td { background: var(--bg); }
+tbody tr:nth-child(even) th { background: var(--bg); }
+
+@media (min-width: 768px) {
+  .price-section__hint { display: none; }
+}
+
+/* Added: Investors — surface background, continuing the alternating rhythm
+   (key-figures, quick-links, and contact are all var(--surface) too). */
+.investors { background: var(--surface); }
+.investors__grid { display: grid; gap: var(--space-4); }
+.investors__resources {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-2);
+}
+.investors__resources a {
+  display: block;
+  padding: var(--space-2) 0;
+  font-weight: 600;
+  border-bottom: 1px solid var(--line);
+}
+.investors__resources li:last-child a { border-bottom: 0; }
+
+@media (min-width: 900px) {
+  .investors__grid { grid-template-columns: 1.1fr 1fr; align-items: start; }
+  .investors__resources { border-top: 0; padding-top: var(--space-1); }
+}
+
+/* Added: Careers — default background, alternating against Investors above */
+.careers__grid { display: grid; gap: var(--space-4); }
+.careers__departments { display: grid; gap: var(--space-3); }
+.careers__departments h3 { margin-bottom: 2px; font-size: 1rem; }
+.careers__departments p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; }
+
+@media (min-width: 640px) {
+  .careers__departments { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 900px) {
+  .careers__grid { grid-template-columns: 1.1fr 1fr; align-items: start; }
+}
+
+/* ==========================================================================
+   10. Contact
+   ========================================================================== */
+.contact { background: var(--surface); }
+.contact__grid { display: grid; gap: var(--space-4); }
+.contact__details p { margin-bottom: var(--space-3); }
+.contact__details strong { display: block; color: var(--ink-soft); font-size: 0.8rem; text-transform: none; margin-bottom: 2px; }
+
+@media (min-width: 800px) {
+  .contact__grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Added: FAQ accordion, built on native details/summary — same no-JS-safe
+   approach as the mobile menu, so every question works with zero script. */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 760px;
+}
+.faq-item {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: var(--space-3) var(--space-4);
+}
+.faq-item summary {
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.05rem;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+";
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--link);
+  flex-shrink: 0;
+  transition: transform 150ms ease;
+}
+/* [open] is a native CSS state — the + rotates into a × with zero JS */
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item__answer { margin-top: var(--space-2); }
+.faq-item__answer p { margin: 0; color: var(--ink-soft); max-width: 65ch; }
+
+/* ==========================================================================
+   11. Footer
+   ========================================================================== */
+.site-footer { background: var(--ink); color: var(--cream); padding-block: var(--space-5) var(--space-4); }
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+.footer-col h3 { color: #fff; font-size: 0.95rem; margin-bottom: var(--space-2); }
+.footer-col ul { display: flex; flex-direction: column; gap: var(--space-1); }
+.footer-col a { color: var(--cream); text-decoration: none; font-size: 0.9rem; }
+.footer-col a:hover { color: #fff; }
+
+.site-footer__bottom {
+  margin-top: var(--space-5);
+  padding-top: var(--space-3);
+  border-top: 1px solid #3E331E;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  font-size: 0.8rem;
+  color: #A39075; /* muted warm tone, 6.16:1 against the dark footer */
+}
+.social-links { display: flex; gap: var(--space-3); }
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--cream);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.social-links a:hover { color: var(--accent); }
+/* Logos stay a single color (currentColor) rather than each platform's own
+   brand color, so the footer keeps the same restrained palette as the rest
+   of the site instead of turning into a row of mismatched brand swatches. */
+.social-links__icon { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+.site-footer__disclaimer { width: 100%; margin: 0; }
+
+@media (min-width: 720px) {
+  .site-footer__grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Added: Board of Directors card grid */
+.board-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr;
+}
+.board-member {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+/* Added: photo avatar, one per board member. Placeholder gradient until
+   each --board-N-img variable (section 1, Variables) is swapped for a
+   real photo — same pattern as --banner-img and the rest. */
+.board-member__avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: var(--space-3);
+  flex-shrink: 0;
+}
+.board-member--1 .board-member__avatar { background-image: var(--board-1-img); }
+.board-member--2 .board-member__avatar { background-image: var(--board-2-img); }
+.board-member--3 .board-member__avatar { background-image: var(--board-3-img); }
+.board-member--4 .board-member__avatar { background-image: var(--board-4-img); }
+.board-member--5 .board-member__avatar { background-image: var(--board-5-img); }
+.board-member--6 .board-member__avatar { background-image: var(--board-6-img); }
+.board-member h3 { margin-bottom: 2px; }
+.board-member__title {
+  display: block;
+  color: var(--link);
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: var(--space-2);
+}
+.board-member p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; }
+
+@media (min-width: 640px) {
+  .board-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1000px) {
+  .board-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Added: Milestones & Recognitions timeline */
+.timeline {
+  position: relative;
+  max-width: 700px;
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--line);
+}
+.timeline__item { position: relative; padding-bottom: var(--space-4); }
+.timeline__item:last-child { padding-bottom: 0; }
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--space-4) - 6px);
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--surface);
+}
+.timeline__year {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--link);
+  font-size: 1.1rem;
+  margin: 0 0 2px;
+}
+.timeline__item p { margin: 0; color: var(--ink-soft); max-width: 60ch; }
+
+/* ==========================================================================
+   12. Utilities
+   ========================================================================== */
+.help-button {
+  position: fixed;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--orange);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(102, 63, 0, 0.3);
+  z-index: 95;
+}
+.help-button:hover { background: var(--deep-orange); color: #fff; }
+
+/* Visually hidden but still readable by screen readers and reachable by
+   keyboard — used for the tab legend and the radio inputs in the About
+   section's Vision/Approach/Values switcher. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Desktop nav swap: hide mobile menu, show full nav at wider widths */
+@media (min-width: 900px) {
+  .main-nav { display: block; }
+  .mobile-menu { display: none; }
+}
+@media (min-width: 900px) and (max-width: 1099px) {
+  .main-nav__list { gap: var(--space-3); }
+}
+
+/* ==========================================================================
+   13. Dark mode
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #201B13;
+    --surface: #2D261B;
+    --ink: #F2ECE3;
+    --ink-soft: #C9B79C;
+    --line: #3E3628;
+    /* --orange (#996300) measures only 3.37:1 against this dark --bg — fails
+       AA. This override exists specifically because --link is a separate
+       token from --orange: --orange also backs the help-button and chart
+       fills, which must NOT get this much lighter in dark mode. */
+    --link: #FFB329;
+  }
+  .notice-bar { background: #0D1018; }
+  /* .site-footer uses var(--ink) for its background, which flips to
+     near-white in dark mode — pin it to the same fixed dark tone used
+     elsewhere so the footer doesn't go near-invisible. */
+  .site-footer { background: #0D1018; }
+  .site-header { background: var(--surface); border-color: var(--line); }
+  .banner__media::after { background: rgba(32, 27, 19, 0.82); }
+  .banner__title { color: #F2ECE3; }
+  .quick-link-card { background: var(--surface); }
+  thead th { background: #0D1018; }
+  tbody tr:nth-child(even) td { background: var(--surface); }
+  tbody tr:nth-child(even) th { background: #2F2A23; }
+  /* Pinned rather than var(--deep-orange): deep-orange-on-accent measured
+     4.40:1 here, a near-miss. The fixed near-black clears it at 9.07:1. */
+  .btn--primary { color: #0D1018; }
+}
+
+/* ==========================================================================
+   14. Reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .banner { animation: none; opacity: 1; }
+  .site-header { transition: none; }
+  .sub-menu { transition: none; }
+  .skip-link { transition: none; }
+}
