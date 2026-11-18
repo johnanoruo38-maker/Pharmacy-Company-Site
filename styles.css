@@ -1061,6 +1061,8 @@ tbody tr:nth-child(even) th { background: var(--bg); }
   .site-header { background: var(--surface); border-color: var(--line); }
   .banner__media::after { background: rgba(32, 27, 19, 0.82); }
   .banner__title { color: #F2ECE3; }
+    /* Page-intro photo overlay: same dark treatment as the homepage banner */
+  .page-intro__media::after { background: rgba(32, 27, 19, 0.82); }
   .quick-link-card { background: var(--surface); }
   thead th { background: #0D1018; }
   tbody tr:nth-child(even) td { background: var(--surface); }
