@@ -781,6 +781,17 @@ tbody tr:nth-child(even) th { background: var(--bg); }
   .price-section__hint { display: none; }
 }
 
+/* Phones: keep the product column pinned, but narrow enough that
+   price and availability columns stay visible beside it */
+@media (max-width: 767px) {
+  tbody th,
+  thead th:first-child {
+    white-space: normal;
+    width: 8rem;
+    min-width: 8rem;
+  }
+}
+
 /* Added: Investors — surface background, continuing the alternating rhythm
    (key-figures, quick-links, and contact are all var(--surface) too). */
 .investors { background: var(--surface); }
